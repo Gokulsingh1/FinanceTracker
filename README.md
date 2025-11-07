@@ -12,3 +12,6 @@
 
 # Start project
 * Start project using `python manage.py runserver`
+
+# use below link to access 
+https://financetracker-wi9o.onrender.com/dashboard
