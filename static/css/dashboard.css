@@ -1,0 +1,111 @@
+/* ✅ FULL-SCREEN BACKGROUND FIX */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+
+
+    background: url("dark-gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+
+/* ✅ HEADER - GLASS EFFECT */
+header {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+
+
+/* ✅ MAIN CONTENT */
+main {
+    padding: 15px 20px;
+}
+
+
+/* ✅ CHART CONTAINER - BEAUTIFUL GLASS BOX */
+.chart-container {
+    width: 85%;
+    margin: 10px auto;
+    padding: 40px 40px;
+    background: rgba(255, 255, 255, 0.30);  /* semi-white */
+    backdrop-filter: blur(10px);            /* blur effect */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgb(0,0,0,0.25);
+    transition: ease 0.5s;
+}
+
+
+/* ✅ FLEX CONTAINER */
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+/* ✅ LEFT CHART */
+.left-chart {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+}
+
+
+/* ✅ RIGHT CHART */
+.right-chart {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    padding: 10px 10px;
+    width: 480px;
+    margin-left: 0;
+}
+
+
+/* ✅ FIELD SECTION */
+.feilds {
+    padding: 50px;
+}
+
+
+/* ✅ INCOME BUTTON */
+.income {
+    width: 150px;
+    padding: 20px 40px;
+    margin: 40px 40px;
+    border-radius: 10px;
+    font-family: fantasy;
+    font-size: larger;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ✅ EXPENSE BUTTON */
+.expense {
+    width: 150px;
+    padding: 20px 40px;
+    margin: 40px 40px;
+    border-radius: 10px;
+    font-family: fantasy;
+    font-size: larger;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ✅ BALANCE BUTTON */
+.balance {
+    padding: 20px 40px;
+    margin: 40px 40px;
+    border-radius: 10px;
+    font-family: fantasy;
+    font-size: larger;
+    background-color: rgba(255, 255, 255, 0.7);
+}

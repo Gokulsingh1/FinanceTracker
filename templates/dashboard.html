@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTech. | Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+</head>
+
+<body>
+    <!-- ✅ NAVIGATION -->
+    <nav class="nav">
+        <a href="/dashboard" id="logo"><h1>FinTech.</h1></a>
+
+        <div class="nav-button">
+            <button class="btn" onclick="location.href='/incomes'">Incomes</button>
+            <button class="btn" onclick="location.href='/expenses'">Expenses</button>
+            <button class="btn" onclick="location.href='/settings'">Settings</button>
+        </div>
+
+        <div class="nav-logo">
+            <button class="btn left" onclick="location.href='/profile'">Profile</button>
+            <button class="btn left" onclick="location.href='/logout'">Logout</button>
+        </div>
+    </nav>
+
+    <!-- ✅ MAIN CONTENT -->
+    <main class="container">
+        <!-- LEFT SIDE CHARTS -->
+        <div class="left-chart">
+            <div class="chart-container">
+                <canvas id="chart1"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart2"></canvas>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE CHART + BUTTONS -->
+        <div class="right-chart">
+            <div class="chart-container">
+                <canvas id="chart3"></canvas>
+            </div>
+
+            <div class="feilds">
+                <button class="income" onclick="location.href='/incomes'">Incomes</button>
+                <button class="expense" onclick="location.href='/expenses'">Expenses</button>
+                <p class="balance">Balance: {{ balance }} ₹</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ✅ CHART.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+    <!-- ✅ SAFEST WAY TO PASS DJANGO DATA TO JS -->
+    {{ pre_10days_list|json_script:"days-json" }}
+    {{ Income_last_10days_amount|json_script:"incomes-json" }}
+    {{ Expense_last_10days_amount|json_script:"expenses-json" }}
+    {{ category_list|json_script:"categories-json" }}
+    {{ catg_total_list|json_script:"catvals-json" }}
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Parse JSON from safe script tags (no comma / quote issues!)
+        const days = JSON.parse(document.getElementById("days-json").textContent || "[]");
+        const incomes = JSON.parse(document.getElementById("incomes-json").textContent || "[]");
+        const expenses = JSON.parse(document.getElementById("expenses-json").textContent || "[]");
+        const categories = JSON.parse(document.getElementById("categories-json").textContent || "[]");
+        const catVals = JSON.parse(document.getElementById("catvals-json").textContent || "[]");
+
+        // Helper: create chart only if canvas exists
+        function buildChart(canvasId, config) {
+            const el = document.getElementById(canvasId);
+            if (!el) return null;
+            const ctx = el.getContext("2d");
+            return new Chart(ctx, config);
+        }
+
+        // Helper: generate enough colors for doughnut (cycles if needed)
+        function makeColors(n) {
+            const base = ["#FF6384", "#36A2EB", "#FFCE56", "#9FE2BF", "#808080", "#7DFF33"];
+            const out = [];
+            for (let i = 0; i < n; i++) out.push(base[i % base.length]);
+            return out;
+        }
+
+        // ✅ BAR CHART — Incomes Last 10 Days
+        buildChart("chart1", {
+            type: "bar",
+            data: {
+                labels: days,
+                datasets: [{
+                    label: "Last 10 Days Incomes",
+                    data: incomes,
+                    backgroundColor: "rgba(75, 192, 192, 0.4)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // ✅ LINE CHART — Expenses Last 10 Days
+        buildChart("chart2", {
+            type: "line",
+            data: {
+                labels: days,
+                datasets: [{
+                    label: "Last 10 Days Expenses",
+                    data: expenses,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    backgroundColor: "rgba(255, 99, 132, 0.3)",
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // ✅ DOUGHNUT CHART — Categories
+        buildChart("chart3", {
+            type: "doughnut",
+            data: {
+                labels: categories,
+                datasets: [{
+                    data: catVals,
+                    backgroundColor: makeColors(catVals.length)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    });
+    </script>
+</body>
+</html>
